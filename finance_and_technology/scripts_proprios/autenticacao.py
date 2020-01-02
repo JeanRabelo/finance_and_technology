@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup as BS
+from . import aux
 
 def imagem_e_sessao():
     url_beginning = r'https://cvmweb.cvm.gov.br/SWB//Sistemas/SCW/CPublica/CConsolFdo/FormBuscaParticFdo.aspx'
@@ -24,13 +25,10 @@ def enviar_dados(request):
     s = requests.Session()
     cookies_jar = requests.cookies.RequestsCookieJar()
 
-    # cookies_jar.set('name', 'jerry', domain='dev2qa.com', path='/cookies')
-    # cookies_jar.set('password', 'jerry888', domain='dev2qa.com', path='/cookies')
-
     cookies_jar.set('ASP.NET_SessionId', request.POST.get('cookie_val_1'), domain='cvmweb.cvm.gov.br', path='/')
     cookies_jar.set('CVMWebCookie', request.POST.get('cookie_val_2'), domain='cvmweb.cvm.gov.br', path='/')
 
     url_post = r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CConsolFdo/ResultBuscaParticFdo.aspx?CNPJNome=' + args['txtCNPJNome'] + '&TpPartic=0&Adm=false&numRandom=' + args['numRandom'] + '&SemFrame='
     response = s.post(url_post, args, cookies=cookies_jar)
 
-    return BS(response.content, 'html.parser')
+    return aux.lista_fundos(BS(response.content, 'html.parser'))

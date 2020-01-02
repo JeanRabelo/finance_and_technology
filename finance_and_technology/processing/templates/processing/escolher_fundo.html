@@ -5,5 +5,16 @@
 {% endblock %}
 
 {% block conteudo %}
-  <p>Resultado = {{conteudo}}</p>
+  <!-- <p>Resultado = {{conteudo}}</p> -->
+  <tbody>
+    {% for fundo in lista_fundos %}
+      <tr>
+        <td>{{ fundo['nome'] }}</td>
+        <td>{{ fundo['cnpj'] }}</td>
+        <td>{{ fundo['tipo_fundo'] }}</td>
+        <td>{{ fundo['link_1'] }}</td>
+        <td>{{ fundo['link_2'] }}</td>
+      </tr>
+    {% endfor %}
+  </tbody>
 {% endblock %}

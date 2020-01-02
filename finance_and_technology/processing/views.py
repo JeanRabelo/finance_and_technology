@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from scripts_proprios import funcoes, autenticacao
+from scripts_proprios import autenticacao
 from base64 import b64encode
 from pprint import pprint
 
@@ -18,7 +18,8 @@ def escolherFundo_view(request):
     if request.method == 'POST':
         # print(request.POST)
         # print(type(request.POST['sessao']['s']))
-        conteudo = autenticacao.enviar_dados(request)
-        return render(request, 'processing/escolher_fundo.html', {'conteudo' : conteudo})
+        lista_fundos = autenticacao.enviar_dados(request)
+        pprint(lista_fundos)
+        return render(request, 'processing/escolher_fundo.html', {'lista_fundos' : lista_fundos})
     else:
         return redirect('processing:buscar_fundo')

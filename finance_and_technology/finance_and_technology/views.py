@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-from scripts_proprios import funcoes
+# from scripts_proprios import funcoes
 
 def home_view(request):
     return render(request, 'home.html')
