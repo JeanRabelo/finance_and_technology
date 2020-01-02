@@ -4,6 +4,6 @@ from . import views
 app_name = 'processing'
 
 urlpatterns = [
-    path('inputs/', views.inputs_view, name = 'inputs'),
-    path('results/', views.resultadoSoma_view, name = 'resultado_soma'),
+    path('buscar_fundo/', views.buscaFundo_view, name = 'buscar_fundo'),
+    path('escolher_fundo/', views.escolherFundo_view, name = 'escolher_fundo'),
 ]

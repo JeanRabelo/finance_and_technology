@@ -1,0 +1,20 @@
+{% extends 'base_layout.html' %}
+
+{% block titulo %}
+  <title>Busca fundo</title>
+{% endblock %}
+
+{% block conteudo %}
+  <h1>Coloque as caracteristicas do fundo</h1>
+  <form class="caracteristicas" action="{% url 'processing:escolher_fundo' %}" method="post">
+    {% csrf_token %}
+    <p>Nome ou CNPJ do fundo: <input type="text" name="nome_ou_cnpj"></p>
+    <div class="captcha">
+      <img src="data:;base64,{{ imagem_captcha }}"/>
+    </div>
+    <p>Captcha acima: <input type="number" name="captcha"></p>
+    <input type="hidden" name="cookie_val_1" value="{{ cookie_val_1 }}">
+    <input type="hidden" name="cookie_val_2" value="{{ cookie_val_2 }}">
+    <input type="submit", value="Ok">
+  </form>
+{% endblock %}
