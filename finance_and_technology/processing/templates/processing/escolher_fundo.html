@@ -21,12 +21,11 @@
     <tbody>
       {% for fundo in lista_fundos %}
         <tr>
-          <td>{{ fundo.nome }}</td>
-          <td>{{ fundo.cnpj }}</td>
-          <td style="text-align: center;">{{ fundo.tipo_fundo }}</td>
-          {% comment %}
           <td><a href="{{ fundo.link_2 }}">{{ fundo.nome }}</a></td>
           <td><a href="{{ fundo.link_1 }}">{{ fundo.cnpj }}</a></td>
+          <td style="text-align: center;">{{ fundo.tipo_fundo }}</td>
+
+          {% comment %}
           <td>{{ fundo.tipo_fundo }}</td>
           {% endcomment %}
         </tr>
