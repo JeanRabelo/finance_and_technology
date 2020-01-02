@@ -5,16 +5,32 @@
 {% endblock %}
 
 {% block conteudo %}
-  <!-- <p>Resultado = {{conteudo}}</p> -->
-  <tbody>
-    {% for fundo in lista_fundos %}
+  <table><caption>Fundos encontrados</caption>
+    <thead>
       <tr>
-        <td>{{ fundo['nome'] }}</td>
-        <td>{{ fundo['cnpj'] }}</td>
-        <td>{{ fundo['tipo_fundo'] }}</td>
-        <td>{{ fundo['link_1'] }}</td>
-        <td>{{ fundo['link_2'] }}</td>
+        <th>Nome do fundo</th>
+        <th>CNPJ</th>
+        <th>Tipo de fundo</th>
+
+        {% comment %}
+        <th colspan="2">CNPJ</th>
+        {% endcomment %}
+
       </tr>
-    {% endfor %}
-  </tbody>
+    </thead>
+    <tbody>
+      {% for fundo in lista_fundos %}
+        <tr>
+          <td>{{ fundo.nome }}</td>
+          <td>{{ fundo.cnpj }}</td>
+          <td style="text-align: center;">{{ fundo.tipo_fundo }}</td>
+          {% comment %}
+          <td><a href="{{ fundo.link_2 }}">{{ fundo.nome }}</a></td>
+          <td><a href="{{ fundo.link_1 }}">{{ fundo.cnpj }}</a></td>
+          <td>{{ fundo.tipo_fundo }}</td>
+          {% endcomment %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 {% endblock %}
