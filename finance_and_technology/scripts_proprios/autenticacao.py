@@ -9,14 +9,8 @@ def imagem_e_sessao():
     txt_code = soup.find('img').get('src')[2:]
     url_img = "https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica" + txt_code
     response = s.get(url_img)
-    print('--------------------')
     cookie_val_1 = s.cookies.get(name='ASP.NET_SessionId', domain='cvmweb.cvm.gov.br')
-    print(cookie_val_1)
-
     cookie_val_2 = s.cookies.get(name='CVMWebCookie', domain='cvmweb.cvm.gov.br')
-    print(cookie_val_2)
-    print('--------------------')
-
     img_data = response.content
     return [img_data, cookie_val_1, cookie_val_2]
 
