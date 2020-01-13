@@ -32,3 +32,20 @@ def enviar_dados(request):
     response = s.post(url_post, args, cookies=cookies_jar)
 
     return aux.lista_fundos(BS(response.content, 'html.parser'))
+
+def retornar_fundo(request):
+    cookie_val_1 = request.POST['cookie_val_1']
+    cookie_val_2 = request.POST['cookie_val_2']
+
+    s = requests.Session()
+    cookies_jar = requests.cookies.RequestsCookieJar()
+
+    cookies_jar.set('ASP.NET_SessionId', request.POST.get('cookie_val_1'), domain='cvmweb.cvm.gov.br', path='/')
+    cookies_jar.set('CVMWebCookie', request.POST.get('cookie_val_2'), domain='cvmweb.cvm.gov.br', path='/')
+    num_fundo = r'PK_PARTIC=178347'
+
+    url_post = r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CConsolFdo/ResultBuscaDocsFdo.aspx?' + num_fundo + r'&SemFrame='
+
+    response = s.get(url_post, cookies=cookies_jar)
+
+    return BS(response.content, 'html.parser')

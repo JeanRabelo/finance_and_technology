@@ -15,9 +15,15 @@ def buscaFundo_view(request):
 @login_required(login_url = '/accounts/login/')
 def escolherFundo_view(request):
     if request.method == 'POST':
-        # print(request.POST)
-        # print(type(request.POST['sessao']['s']))
         lista_fundos = autenticacao.enviar_dados(request)
-        return render(request, 'processing/escolher_fundo.html', {'lista_fundos' : lista_fundos})
+        cookie_val_1 = request.POST['cookie_val_1']
+        cookie_val_2 = request.POST['cookie_val_2']
+
+        return render(request, 'processing/escolher_fundo.html', {'lista_fundos' : lista_fundos, 'cookie_val_1': cookie_val_1, 'cookie_val_2': cookie_val_2})
     else:
         return redirect('processing:buscar_fundo')
+
+@login_required(login_url = '/accounts/login/')
+def fundo178347_view(request):
+    response = autenticacao.retornar_fundo(request)
+    return render(request, 'processing/fundo178347.html', {'response': response})
