@@ -26,4 +26,6 @@ def escolherFundo_view(request):
 @login_required(login_url = '/accounts/login/')
 def fundo178347_view(request):
     response = autenticacao.retornar_fundo(request)
-    return render(request, 'processing/fundo178347.html', {'response': response})
+    table_header = response[0]
+    table_content = response[1:]
+    return render(request, 'processing/fundo178347.html', {'table_header': table_header, 'table_content': table_content})

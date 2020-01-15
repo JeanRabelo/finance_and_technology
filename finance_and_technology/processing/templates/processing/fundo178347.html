@@ -5,6 +5,25 @@
 {% endblock %}
 
 {% block conteudo %}
-  <h1>Está funcionando!</h1>
-  <p>{{ response }}</p>
+  <h1>Informações abaixo</h1>
+
+  <table><caption>Posições do fundo </caption>
+    <thead>
+      <tr>
+        {% for celula in table_header%}
+          <th>{{celula}}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      {% for linha in table_content %}
+        <tr>
+          {% for celula in linha %}
+            <td>{{celula}}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
 {% endblock %}

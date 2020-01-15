@@ -44,8 +44,10 @@ def retornar_fundo(request):
     cookies_jar.set('CVMWebCookie', request.POST.get('cookie_val_2'), domain='cvmweb.cvm.gov.br', path='/')
     num_fundo = r'PK_PARTIC=178347'
 
-    url_post = r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CConsolFdo/ResultBuscaDocsFdo.aspx?' + num_fundo + r'&SemFrame='
+    # url_anterior = r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CConsolFdo/ResultBuscaDocsFdo.aspx?' + num_fundo + r'&SemFrame='
+    # response = s.get(url_anterior, cookies=cookies_jar)
 
-    response = s.get(url_post, cookies=cookies_jar)
+    url = r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CDA/CPublicaCDA.aspx?' + num_fundo + '&SemFrame='
+    response = s.get(url, cookies=cookies_jar)
 
-    return BS(response.content, 'html.parser')
+    return aux.ativos(BS(response.content, 'html.parser'))
