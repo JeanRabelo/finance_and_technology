@@ -18,7 +18,6 @@ def escolherFundo_view(request):
         lista_fundos = autenticacao.enviar_dados(request)
         cookie_val_1 = request.POST['cookie_val_1']
         cookie_val_2 = request.POST['cookie_val_2']
-
         return render(request, 'processing/escolher_fundo.html', {'lista_fundos' : lista_fundos, 'cookie_val_1': cookie_val_1, 'cookie_val_2': cookie_val_2})
     else:
         return redirect('processing:buscar_fundo')
