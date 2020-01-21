@@ -70,12 +70,7 @@ def retornar_fundo(request):
     n_partic = action_str.find('PK_PARTIC')
     num_fundo = action_str[n_partic:(n_partic+16)]
 
-    print('num fundo = ' + num_fundo)
-    # num_fundo = r'PK_PARTIC=178347'
-
     url = r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CDA/CPublicaCDA.aspx?' + num_fundo + '&SemFrame='
     response = s.get(url, cookies=cookies_jar)
-
-    # Opening JSON file
 
     return aux.ativos(BS(response.content, 'html.parser'))
