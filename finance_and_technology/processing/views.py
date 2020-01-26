@@ -15,10 +15,12 @@ def buscaFundo_view(request):
 @login_required(login_url = '/accounts/login/')
 def escolherFundo_view(request):
     if request.method == 'POST':
-        lista_fundos = autenticacao.enviar_dados(request)
+        enviar_dados_resultado =  autenticacao.enviar_dados(request)
+        lista_fundos = enviar_dados_resultado[0]
+        argumentos_aspnet = enviar_dados_resultado[1]
         cookie_val_1 = request.POST['cookie_val_1']
         cookie_val_2 = request.POST['cookie_val_2']
-        return render(request, 'processing/escolher_fundo.html', {'lista_fundos' : lista_fundos, 'cookie_val_1': cookie_val_1, 'cookie_val_2': cookie_val_2})
+        return render(request, 'processing/escolher_fundo.html', {'lista_fundos' : lista_fundos, 'cookie_val_1': cookie_val_1, 'cookie_val_2': cookie_val_2, 'argumentos_aspnet': argumentos_aspnet})
     else:
         return redirect('processing:buscar_fundo')
 

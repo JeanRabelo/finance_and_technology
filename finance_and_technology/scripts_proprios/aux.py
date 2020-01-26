@@ -1,6 +1,8 @@
 import re
+from pprint import pprint
 
 def lista_fundos(soup):
+
     lista = []
 
     soup_fundos = soup.find_all('tr')

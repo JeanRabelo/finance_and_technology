@@ -30,6 +30,12 @@
               {% csrf_token %}
               <input type="hidden" name="link_1" value="{{ fundo.link_1 }}">
               <input type="hidden" name="link_2" value="{{ fundo.link_2 }}">
+              <input type="hidden" name="argumentos_aspnet_Form1" value="{{ argumentos_aspnet.Form1 }}">
+              <input type="hidden" name="argumentos_aspnet___EVENTARGUMENT" value="{{ argumentos_aspnet.EVENTARGUMENT }}">
+              <input type="hidden" name="argumentos_aspnet___VIEWSTATE" value="{{ argumentos_aspnet.VIEWSTATE }}">
+              <input type="hidden" name="argumentos_aspnet___VIEWSTATEGENERATOR" value="{{ argumentos_aspnet.VIEWSTATEGENERATOR }}">
+              <input type="hidden" name="argumentos_aspnet___EVENTVALIDATION" value="{{ argumentos_aspnet.EVENTVALIDATION }}">
+
               <input type="hidden" name="cookie_val_1" value="{{ cookie_val_1 }}">
               <input type="hidden" name="cookie_val_2" value="{{ cookie_val_2 }}">
               <input type="submit", value="Ir">
