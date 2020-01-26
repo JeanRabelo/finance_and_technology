@@ -2,6 +2,8 @@ import requests
 from bs4 import BeautifulSoup as BS
 from . import aux
 import json
+from random import choice
+
 
 def imagem_e_sessao():
     url_beginning = r'https://cvmweb.cvm.gov.br/SWB//Sistemas/SCW/CPublica/CConsolFdo/FormBuscaParticFdo.aspx'
@@ -35,9 +37,8 @@ def enviar_dados(request):
     soup = BS(response.content, 'html.parser')
     argumentos_aspnet = {}
 
-    # argumentos_aspnet['__EVENTTARGET'] = soup.find(id='__EVENTTARGET')['value']
     argumentos_aspnet['Form1'] = soup.find(id='Form1')['action']
-    argumentos_aspnet['__EVENTTARGET'] = 'ddlFundos$_ctl5$Linkbutton4'
+    # argumentos_aspnet['__EVENTTARGET'] = 'ddlFundos$_ctl5$Linkbutton4'
     argumentos_aspnet['__EVENTARGUMENT'] = ''
     argumentos_aspnet['__VIEWSTATE'] = soup.find(id='__VIEWSTATE')['value']
     argumentos_aspnet['__VIEWSTATEGENERATOR'] = soup.find(id='__VIEWSTATEGENERATOR')['value']
@@ -51,6 +52,8 @@ def enviar_dados(request):
 def retornar_fundo(request):
     cookie_val_1 = request.POST['cookie_val_1']
     cookie_val_2 = request.POST['cookie_val_2']
+    link_1 = request.POST['link_1']
+    link_2 = request.POST['link_2']
 
     s = requests.Session()
     cookies_jar = requests.cookies.RequestsCookieJar()
@@ -60,6 +63,8 @@ def retornar_fundo(request):
 
     with open('argumentos_aspnet.json') as json_file:
         argumentos_aspnet = json.load(json_file)
+
+    argumentos_aspnet['__EVENTTARGET'] = choice([link_1,link_2])
 
     url_generica = r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CConsolFdo' + argumentos_aspnet['Form1'][1:]
     del argumentos_aspnet['Form1']
