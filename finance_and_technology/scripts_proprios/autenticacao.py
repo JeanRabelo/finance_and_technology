@@ -4,7 +4,6 @@ from . import aux
 import json
 from random import choice
 
-
 def imagem_e_sessao():
     url_beginning = r'https://cvmweb.cvm.gov.br/SWB//Sistemas/SCW/CPublica/CConsolFdo/FormBuscaParticFdo.aspx'
     s = requests.Session()
@@ -38,14 +37,10 @@ def enviar_dados(request):
     argumentos_aspnet = {}
 
     argumentos_aspnet['Form1'] = soup.find(id='Form1')['action']
-    # argumentos_aspnet['__EVENTTARGET'] = 'ddlFundos$_ctl5$Linkbutton4'
     argumentos_aspnet['EVENTARGUMENT'] = ''
     argumentos_aspnet['VIEWSTATE'] = soup.find(id='__VIEWSTATE')['value']
     argumentos_aspnet['VIEWSTATEGENERATOR'] = soup.find(id='__VIEWSTATEGENERATOR')['value']
     argumentos_aspnet['EVENTVALIDATION'] = soup.find(id='__EVENTVALIDATION')['value']
-
-    # with open('argumentos_aspnet.json', 'w') as fp:
-    #     json.dump(argumentos_aspnet, fp)
 
     return [aux.lista_fundos(soup), argumentos_aspnet]
 
@@ -69,15 +64,13 @@ def retornar_fundo(request):
     argumentos_aspnet['__EVENTVALIDATION'] = request.POST['argumentos_aspnet___EVENTVALIDATION']
     argumentos_aspnet['__EVENTTARGET'] = choice([link_1,link_2])
 
-
-    # with open('argumentos_aspnet.json') as json_file:
-    #     argumentos_aspnet = json.load(json_file)
-
-
     url_generica = r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CConsolFdo' + argumentos_aspnet['Form1'][1:]
+
     del argumentos_aspnet['Form1']
 
     response_generica = s.post(url_generica, argumentos_aspnet)
+
+    argumentos_aspnet['Form1'] = request.POST['argumentos_aspnet_Form1']
 
     action_str = BS(response_generica.content, 'html.parser').find(id='Form1')['action']
     n_partic = action_str.find('PK_PARTIC')
@@ -86,4 +79,4 @@ def retornar_fundo(request):
     url = r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CDA/CPublicaCDA.aspx?' + num_fundo + '&SemFrame='
     response = s.get(url, cookies=cookies_jar)
 
-    return aux.ativos(BS(response.content, 'html.parser'))
+    return [aux.ativos(BS(response.content, 'html.parser')),argumentos_aspnet, request]

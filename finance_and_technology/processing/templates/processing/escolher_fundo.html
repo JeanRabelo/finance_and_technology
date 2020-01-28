@@ -1,7 +1,7 @@
 {% extends 'base_layout.html' %}
 
 {% block titulo %}
-  <title>Escolher fundo</title>
+  <title>Finance Hero: Escolher fundo</title>
 {% endblock %}
 
 {% block conteudo %}
@@ -26,7 +26,7 @@
           <td>{{ fundo.cnpj }}</td>
           <td style="text-align: center;">{{ fundo.tipo_fundo }}</td>
           <td>
-            <form class="escolher_fundo" action="{% url 'processing:fundo_178347' %}" method="post">
+            <form class="escolher_fundo" action="{% url 'processing:fundo' %}" method="post">
               {% csrf_token %}
               <input type="hidden" name="link_1" value="{{ fundo.link_1 }}">
               <input type="hidden" name="link_2" value="{{ fundo.link_2 }}">

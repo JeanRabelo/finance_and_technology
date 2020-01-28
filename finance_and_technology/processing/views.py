@@ -1,7 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
 from scripts_proprios import autenticacao
 from base64 import b64encode
+import csv
+
 
 # Create your views here.
 
@@ -25,8 +28,27 @@ def escolherFundo_view(request):
         return redirect('processing:buscar_fundo')
 
 @login_required(login_url = '/accounts/login/')
-def fundo178347_view(request):
-    response = autenticacao.retornar_fundo(request)
-    table_header = response[0]
-    table_content = response[1:]
-    return render(request, 'processing/fundo178347.html', {'table_header': table_header, 'table_content': table_content})
+def fundo_view(request):
+    if request.method == 'POST':
+        [response, argumentos_aspnet, request_old] = autenticacao.retornar_fundo(request)
+        table_header = response[0]
+        table_content = response[1:]
+        return render(request, 'processing/fundo.html', {'table_header': table_header,
+        'table_content': table_content,
+        'argumentos_aspnet': argumentos_aspnet,
+        'cookie_val_1': request_old.POST.get('cookie_val_1'),
+        'cookie_val_2': request_old.POST.get('cookie_val_2')})
+    else:
+        return redirect('processing:buscar_fundo')
+
+@login_required(login_url = '/accounts/login/')
+def csv_view(request):
+    # Create the HttpResponse object with the appropriate CSV header.
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="generico.csv"'
+
+    writer = csv.writer(response)
+    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
+    writer.writerow([request.POST.get('argumentos_aspnet_Form1'), 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+
+    return response

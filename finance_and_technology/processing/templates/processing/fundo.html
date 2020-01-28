@@ -1,0 +1,41 @@
+{% extends 'base_layout.html' %}
+
+{% block titulo %}
+  <title>Finance Hero: Fundo</title>
+{% endblock %}
+
+{% block conteudo %}
+  <h1>Informações abaixo</h1>
+
+  <table><caption>Posições do fundo </caption>
+    <thead>
+      <tr>
+        {% for celula in table_header%}
+          <th>{{celula}}</th>
+        {% endfor %}
+      </tr>
+    </thead>
+    <tbody>
+      <form class="escolher_fundo" action="{% url 'processing:csv' %}" method="post">
+        {% csrf_token %}
+        <input type="hidden" name="argumentos_aspnet_Form1" value="{{ argumentos_aspnet.Form1 }}">
+        <input type="hidden" name="argumentos_aspnet___EVENTARGUMENT" value="{{ argumentos_aspnet.EVENTARGUMENT }}">
+        <input type="hidden" name="argumentos_aspnet___VIEWSTATE" value="{{ argumentos_aspnet.VIEWSTATE }}">
+        <input type="hidden" name="argumentos_aspnet___VIEWSTATEGENERATOR" value="{{ argumentos_aspnet.VIEWSTATEGENERATOR }}">
+        <input type="hidden" name="argumentos_aspnet___EVENTVALIDATION" value="{{ argumentos_aspnet.EVENTVALIDATION }}">
+        <input type="hidden" name="cookie_val_1" value="{{ cookie_val_1 }}">
+        <input type="hidden" name="cookie_val_2" value="{{ cookie_val_2 }}">
+        <input type="submit", value="Baixar csv genérico">
+      </form>
+
+      {% for linha in table_content %}
+        <tr>
+          {% for celula in linha %}
+            <td>{{celula}}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+{% endblock %}
