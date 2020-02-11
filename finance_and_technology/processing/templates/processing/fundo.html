@@ -16,7 +16,7 @@
       </tr>
     </thead>
     <tbody>
-      <form class="escolher_fundo" action="{% url 'processing:csv' %}" method="post">
+      <form class="escolher_fundo" action="{% url 'processing:xlsx' %}" method="post">
         {% csrf_token %}
         <input type="hidden" name="argumentos_aspnet_Form1" value="{{ argumentos_aspnet.Form1 }}">
         <input type="hidden" name="argumentos_aspnet___EVENTARGUMENT" value="{{ argumentos_aspnet.EVENTARGUMENT }}">

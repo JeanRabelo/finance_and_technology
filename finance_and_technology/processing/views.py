@@ -3,11 +3,11 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
 from scripts_proprios import autenticacao
 from base64 import b64encode
-import csv
+from io import BytesIO
+from openpyxl import Workbook
 
 
 # Create your views here.
-
 @login_required(login_url = '/accounts/login/')
 def buscaFundo_view(request):
     [img_data, cookie_val_1, cookie_val_2] = autenticacao.imagem_e_sessao()
@@ -42,13 +42,69 @@ def fundo_view(request):
         return redirect('processing:buscar_fundo')
 
 @login_required(login_url = '/accounts/login/')
-def csv_view(request):
-    # Create the HttpResponse object with the appropriate CSV header.
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename="generico.csv"'
+def xlsx_view(request):
+    """
+    Downloads all movies as Excel file with a single worksheet
+    """
 
-    writer = csv.writer(response)
-    writer.writerow(['First row', 'Foo', 'Bar', 'Baz'])
-    writer.writerow([request.POST.get('argumentos_aspnet_Form1'), 'A', 'B', 'C', '"Testing"', "Here's a quote"])
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
+    response['Content-Disposition'] = 'attachment; filename=simple_xlsx_example.xlsx'
+    workbook = Workbook()
+
+    # Get active worksheet/tab
+    worksheet = workbook.active
+    worksheet.title = 'Summary'
+
+    expenses = (['Aluguel', 1000], ['Gasolina',   100], ['Comida',  300], ['Academia',    50])
+
+    # Start from the first cell. Rows and columns are zero indexed.
+    row_num = 1
+    col_num = 1
+
+    # Iterate over the data and write it out row by row.
+    for item, cost in (expenses):
+        cell = worksheet.cell(row=row_num, column=col_num)
+        cell.value = item
+        cell = worksheet.cell(row=row_num, column=col_num+1)
+        cell.value = cost
+        row_num += 1
+
+    # cell = worksheet.cell(row=row_num, column=col_num)
+    # worksheet.write(row, 1, '=SUM(B1:B4)')
+
+    workbook.save(response)
 
     return response
+
+    # # Define the titles for columns
+    # columns = [
+    #     'ID',
+    #     'Title',
+    #     'Description',
+    #     'Length',
+    #     'Rating',
+    #     'Price',
+    # ]
+    # row_num = 1
+    #
+    # # Assign the titles for each cell of the header
+    # for col_num, column_title in enumerate(columns, 1):
+    #     cell = worksheet.cell(row=row_num, column=col_num)
+    #     cell.value = column_title
+    #
+    # # Iterate through all movies
+
+    # output = BytesIO()
+    # workbook = xlsxwriter.Workbook(output, {'in_memory': True})
+    # worksheet = workbook.add_worksheet('Summary')
+    # workbook.close()
+    #
+    # output.seek(0)
+    #
+    # response = HttpResponse(output.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
+    # response['Content-Disposition'] = "attachment; filename=teste_para_a_microsoft.xlsx"
+    #
+    # output.close()
+    #
+    # response.write(workbook)
+    # return response
