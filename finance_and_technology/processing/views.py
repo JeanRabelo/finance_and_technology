@@ -69,6 +69,9 @@ def xlsx_view(request):
         cell.value = cost
         row_num += 1
 
+    worksheet_2 = workbook.create_sheet(title='Planilha 2',index=2)
+    worksheet_2.cell(row=row_num, column=col_num).value = r'Teste de preenchimento contínuo'
+
     # cell = worksheet.cell(row=row_num, column=col_num)
     # worksheet.write(row, 1, '=SUM(B1:B4)')
 
