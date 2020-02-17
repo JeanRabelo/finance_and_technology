@@ -1,4 +1,5 @@
 import re
+from scripts_proprios import organizar_dadosAux
 
 def extrair_posicionamento(soup):
     # Criar dict
@@ -20,7 +21,7 @@ def extrair_posicionamento(soup):
             lista_celulasPublicas = []
             soup_celulas = soup_linha.find_all('td')
             for soup_celula in soup_celulas:
-                lista_celulasPublicas.append(soup_celula.get_text())
+                lista_celulasPublicas.append(organizar_dadosAux.celula_tratada(soup_celula.get_text()))
             lista_linhasPublicas.append(lista_celulasPublicas)
 
     if soup_infosConfidenciais is not None:
@@ -29,7 +30,7 @@ def extrair_posicionamento(soup):
             lista_celulasConfidenciais = []
             soup_celulas = soup_linha.find_all('td')
             for soup_celula in soup_celulas:
-                lista_celulasConfidenciais.append(soup_celula.get_text())
+                lista_celulasConfidenciais.append(organizar_dadosAux.celula_tratada(soup_celula.get_text()))
             lista_linhasConfidenciais.append(lista_celulasConfidenciais)
 
     lista_linhas = lista_linhasTitulo + lista_linhasPublicas + lista_linhasConfidenciais

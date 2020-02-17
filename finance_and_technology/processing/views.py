@@ -59,37 +59,3 @@ def xlsx_composicao_carteira_view(request):
 
     excel = excel_related.colocar_no_excel(historico)
     return excel
-
-
-
-# ---------- DEPRECATED ----------
-def xlsx_composicao_carteira_view_deprecated(request):
-
-    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
-    response['Content-Disposition'] = 'attachment; filename=simple_xlsx_example.xlsx'
-    workbook = Workbook()
-
-    # Get active worksheet/tab
-    worksheet = workbook.active
-    worksheet.title = 'Summary'
-
-    expenses = (['Aluguel', 1000], ['Gasolina',   100], ['Comida',  300], ['Academia',    50])
-
-    # Start from the first cell. Rows and columns are zero indexed.
-    row_num = 1
-    col_num = 1
-
-    # Iterate over the data and write it out row by row.
-    for item, cost in (expenses):
-        cell = worksheet.cell(row=row_num, column=col_num)
-        cell.value = item
-        cell = worksheet.cell(row=row_num, column=col_num+1)
-        cell.value = cost
-        row_num += 1
-
-    worksheet_2 = workbook.create_sheet(title='Planilha 2',index=2)
-    worksheet_2.cell(row=row_num, column=col_num).value = r'Teste de preenchimento contínuo'
-
-    workbook.save(response)
-
-    return response
