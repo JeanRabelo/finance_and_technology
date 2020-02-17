@@ -4,7 +4,7 @@ from scripts_proprios import organizar_dadosAux
 def extrair_posicionamento(soup):
     # Criar dict
     posicionamento = {}
-    posicionamento['data'] = soup.find(id="ddCOMPTC").find(selected = 'selected').text.replace('/','-')
+    posicionamento['data'] = soup.find(id="ddCOMPTC").find(selected = 'selected').text
 
     soup_infosPublicas = soup.find(id='dlAplics')
     soup_infosConfidenciais = soup.find(id='trAplicsConf')

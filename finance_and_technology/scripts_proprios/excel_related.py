@@ -7,16 +7,18 @@ def colocar_no_excel(historico):
     workbook = Workbook()
 
     for posicionamento in historico:
-        worksheet = workbook.create_sheet(title=posicionamento['data'])
+        worksheet = workbook.create_sheet(title=posicionamento['data'].replace('/','-'))
         row_num = 1
         for linha in posicionamento['carteira']:
             col_num = 1
             for info in linha:
                 cell = worksheet.cell(row=row_num, column=col_num)
                 cell.value = info
+                if info.replace('-','').replace(',','').replace('.','').isnumeric():
+                    cell.number_format = '#,##0.00'
                 col_num = col_num + 1
             row_num = row_num + 1
-            
+
     workbook.save(response)
 
     return response
