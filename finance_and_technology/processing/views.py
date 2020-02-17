@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
-from scripts_proprios import autenticacao
+from scripts_proprios import autenticacao, acessar_info, organizar_dados, excel_related
 from base64 import b64encode
 from io import BytesIO
-from openpyxl import Workbook
+
+import json
 
 
 # Create your views here.
@@ -42,10 +43,27 @@ def fundo_view(request):
         return redirect('processing:buscar_fundo')
 
 @login_required(login_url = '/accounts/login/')
-def xlsx_view(request):
-    """
-    Downloads all movies as Excel file with a single worksheet
-    """
+def xlsx_composicao_carteira_view(request):
+    soup_1 = acessar_info.pegar_soup_resposta(request)
+    posicionamento = organizar_dados.extrair_posicionamento(soup_1)
+    # ------------ TESTE ------------
+    with open('resultado_fundo.txt', 'w') as outfile:
+        json.dump(posicionamento, outfile)
+
+    # ----------- TESTOU -----------
+
+    # ----------- futuro-inicio -----------
+    # lista_datas = organizar_dados.extrair_datas(request)
+    # -----------  futuro-fim  -----------
+    historico = [posicionamento]
+
+    excel = excel_related.colocar_no_excel(historico)
+    return excel
+
+
+
+# ---------- DEPRECATED ----------
+def xlsx_composicao_carteira_view_deprecated(request):
 
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
     response['Content-Disposition'] = 'attachment; filename=simple_xlsx_example.xlsx'
@@ -72,42 +90,6 @@ def xlsx_view(request):
     worksheet_2 = workbook.create_sheet(title='Planilha 2',index=2)
     worksheet_2.cell(row=row_num, column=col_num).value = r'Teste de preenchimento contínuo'
 
-    # cell = worksheet.cell(row=row_num, column=col_num)
-    # worksheet.write(row, 1, '=SUM(B1:B4)')
-
     workbook.save(response)
 
     return response
-
-    # # Define the titles for columns
-    # columns = [
-    #     'ID',
-    #     'Title',
-    #     'Description',
-    #     'Length',
-    #     'Rating',
-    #     'Price',
-    # ]
-    # row_num = 1
-    #
-    # # Assign the titles for each cell of the header
-    # for col_num, column_title in enumerate(columns, 1):
-    #     cell = worksheet.cell(row=row_num, column=col_num)
-    #     cell.value = column_title
-    #
-    # # Iterate through all movies
-
-    # output = BytesIO()
-    # workbook = xlsxwriter.Workbook(output, {'in_memory': True})
-    # worksheet = workbook.add_worksheet('Summary')
-    # workbook.close()
-    #
-    # output.seek(0)
-    #
-    # response = HttpResponse(output.read(), content_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
-    # response['Content-Disposition'] = "attachment; filename=teste_para_a_microsoft.xlsx"
-    #
-    # output.close()
-    #
-    # response.write(workbook)
-    # return response

@@ -11,7 +11,7 @@
         <th>Nome do fundo</th>
         <th>CNPJ</th>
         <th>Tipo de fundo</th>
-        <th>Ir para o Fundo</th>
+        <th>Composicao da Carteira</th>
 
         {% comment %}
         <th colspan="2">CNPJ</th>
@@ -26,7 +26,7 @@
           <td>{{ fundo.cnpj }}</td>
           <td style="text-align: center;">{{ fundo.tipo_fundo }}</td>
           <td>
-            <form class="escolher_fundo" action="{% url 'processing:fundo' %}" method="post">
+            <form class="escolher_fundo" action="{% url 'processing:xlsx_composicao_carteira' %}" method="post">
               {% csrf_token %}
               <input type="hidden" name="link_1" value="{{ fundo.link_1 }}">
               <input type="hidden" name="link_2" value="{{ fundo.link_2 }}">
