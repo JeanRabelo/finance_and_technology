@@ -38,3 +38,14 @@ def extrair_posicionamento(soup):
     posicionamento['carteira'] = lista_linhas
 
     return posicionamento
+
+def extrair_datas(soup):
+    lista_datas = []
+    soup_datas = soup.find(id="ddCOMPTC").find_all('option')
+    for soup_data in soup_datas:
+        data = {}
+        data['valor'] = soup_data.text
+        data['codigo'] = soup_data.get('value')
+        lista_datas.append(data)
+
+    return lista_datas

@@ -38,34 +38,53 @@ def pegar_soup_resposta(request, lista_datas = None):
         url = r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CDA/CPublicaCDA.aspx?' + num_fundo + '&SemFrame='
         response = s.get(url, cookies=cookies_jar)
 
+        print('Data 1 acessada')
+
         return BS(response.content, 'html.parser')
     else:
-        print('Calma, vai ter que esperar')
+        soups_adicionais = []
+        i = 2
+        for data in lista_datas:
 
+            link_1 = request.POST['link_1']
+            link_2 = request.POST['link_2']
 
+            s = requests.Session()
+            cookies_jar = requests.cookies.RequestsCookieJar()
 
+            cookies_jar.set('ASP.NET_SessionId', request.POST.get('cookie_val_1'), domain='cvmweb.cvm.gov.br', path='/')
+            cookies_jar.set('CVMWebCookie', request.POST.get('cookie_val_2'), domain='cvmweb.cvm.gov.br', path='/')
 
+            argumentos_aspnet = {}
+            argumentos_aspnet['Form1'] = request.POST['argumentos_aspnet_Form1']
+            argumentos_aspnet['__EVENTARGUMENT'] = ''
+            argumentos_aspnet['__VIEWSTATE'] = request.POST['argumentos_aspnet___VIEWSTATE']
+            # argumentos_aspnet['__VIEWSTATEGENERATOR'] = request.POST['argumentos_aspnet___VIEWSTATEGENERATOR']
+            argumentos_aspnet['__VIEWSTATEGENERATOR'] = '1D0C00E6'
+            argumentos_aspnet['__EVENTVALIDATION'] = request.POST['argumentos_aspnet___EVENTVALIDATION']
+            argumentos_aspnet['__EVENTTARGET'] = 'ddCOMPTC'
+            argumentos_aspnet['__LASTFOCUS'] = ''
+            argumentos_aspnet['ddCOMPTC'] = data['codigo']
 
+            url_generica = r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CConsolFdo' + argumentos_aspnet['Form1'][1:]
 
+            del argumentos_aspnet['Form1']
 
+            response_generica = s.post(url_generica, argumentos_aspnet)
 
+            argumentos_aspnet['Form1'] = request.POST['argumentos_aspnet_Form1']
 
+            action_str = BS(response_generica.content, 'html.parser').find(id='Form1')['action']
+            n_partic = action_str.find('PK_PARTIC')
+            num_fundo = action_str[n_partic:(n_partic+16)]
 
+            url = r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CDA/CPublicaCDA.aspx?' + num_fundo + '&SemFrame='
+            response = s.get(url, cookies=cookies_jar)
+            soups_adicionais.append(BS(response.content, 'html.parser'))
+            print('Data ' + str(i) + ' acessada')
+            i = i + 1
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        return soups_adicionais
 
 
 def retornar_fundo(request):

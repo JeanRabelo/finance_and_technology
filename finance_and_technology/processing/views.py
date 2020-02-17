@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from scripts_proprios import autenticacao, acessar_info, organizar_dados, excel_related
 from base64 import b64encode
 from io import BytesIO
+from pprint import pprint
 
 import json
 
@@ -44,18 +45,31 @@ def fundo_view(request):
 
 @login_required(login_url = '/accounts/login/')
 def xlsx_composicao_carteira_view(request):
+    # 1º lugar: pegar composição padrão
     soup_1 = acessar_info.pegar_soup_resposta(request)
     posicionamento = organizar_dados.extrair_posicionamento(soup_1)
-    # ------------ TESTE ------------
-    with open('resultado_fundo.txt', 'w') as outfile:
-        json.dump(posicionamento, outfile)
+    print('Data 1 processada')
+    lista_datas = organizar_dados.extrair_datas(soup_1)
+    # pprint(lista_datas)
 
-    # ----------- TESTOU -----------
-
-    # ----------- futuro-inicio -----------
-    # lista_datas = organizar_dados.extrair_datas(request)
-    # -----------  futuro-fim  -----------
+    # 2º lugar: Criar lista de posicionamentos
     historico = [posicionamento]
 
+    # 3º lugar: Append o que tiver a mais
+    if len(lista_datas)>1:
+        soups_adicionais = acessar_info.pegar_soup_resposta(request, lista_datas[1:])
+        pprint(soups_adicionais)
+        i = 2
+        for soup_adicional in soups_adicionais:
+            posicionamento_adicional = organizar_dados.extrair_posicionamento(soup_adicional)
+            historico.append(posicionamento_adicional)
+            print('Data ' + str(i) + ' processada')
+            i = i + 1
+
+    # 4º lugar: Colocar histórico no excel e retornar excel
+    # ------------ TESTE ------------
+    with open('resultado_fundo.txt', 'w') as outfile:
+        json.dump(historico, outfile)
+    # ----------- TESTOU -----------
     excel = excel_related.colocar_no_excel(historico)
     return excel
