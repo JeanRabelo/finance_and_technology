@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup as BS
 from . import aux
 import json
 from random import choice
+from pprint import pprint
 
 def imagem_e_sessao():
     url_beginning = r'https://cvmweb.cvm.gov.br/SWB//Sistemas/SCW/CPublica/CConsolFdo/FormBuscaParticFdo.aspx'
@@ -40,6 +41,7 @@ def enviar_dados(request):
     argumentos_aspnet['EVENTARGUMENT'] = ''
     argumentos_aspnet['VIEWSTATE'] = soup.find(id='__VIEWSTATE')['value']
     argumentos_aspnet['VIEWSTATEGENERATOR'] = soup.find(id='__VIEWSTATEGENERATOR')['value']
+    # print(soup)
     argumentos_aspnet['EVENTVALIDATION'] = soup.find(id='__EVENTVALIDATION')['value']
 
     return [aux.lista_fundos(soup), argumentos_aspnet]
@@ -80,3 +82,20 @@ def retornar_fundo(request):
     response = s.get(url, cookies=cookies_jar)
 
     return [aux.ativos(BS(response.content, 'html.parser')),argumentos_aspnet, request]
+
+def atualizar_request(request, soup):
+    argumentos_aspnet = {}
+    argumentos_aspnet['Form1'] = soup.find(id='Form1')['action']
+    argumentos_aspnet['EVENTARGUMENT'] = ''
+    argumentos_aspnet['VIEWSTATE'] = soup.find(id='__VIEWSTATE')['value']
+    argumentos_aspnet['VIEWSTATEGENERATOR'] = soup.find(id='__VIEWSTATEGENERATOR')['value']
+    argumentos_aspnet['EVENTVALIDATION'] = soup.find(id='__EVENTVALIDATION')['value']
+
+    request.POST = request.POST.copy()
+    request.POST['argumentos_aspnet_Form1'] = argumentos_aspnet['Form1']
+    request.POST['argumentos_aspnet___EVENTARGUMENT'] = argumentos_aspnet['EVENTARGUMENT']
+    request.POST['argumentos_aspnet___VIEWSTATE'] = argumentos_aspnet['VIEWSTATE']
+    request.POST['argumentos_aspnet___VIEWSTATEGENERATOR'] = argumentos_aspnet['VIEWSTATEGENERATOR']
+    request.POST['argumentos_aspnet___EVENTVALIDATION'] = argumentos_aspnet['EVENTVALIDATION']
+
+    return request

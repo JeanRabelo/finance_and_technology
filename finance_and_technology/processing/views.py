@@ -50,21 +50,26 @@ def xlsx_composicao_carteira_view(request):
     posicionamento = organizar_dados.extrair_posicionamento(soup_1)
     print('Data 1 processada')
     lista_datas = organizar_dados.extrair_datas(soup_1)
+    request_2 = autenticacao.atualizar_request(request, soup_1)
     # pprint(lista_datas)
 
     # 2º lugar: Criar lista de posicionamentos
     historico = [posicionamento]
 
-    # 3º lugar: Append o que tiver a mais
-    if len(lista_datas)>1:
-        soups_adicionais = acessar_info.pegar_soup_resposta(request, lista_datas[1:])
-        pprint(soups_adicionais)
-        i = 2
-        for soup_adicional in soups_adicionais:
-            posicionamento_adicional = organizar_dados.extrair_posicionamento(soup_adicional)
-            historico.append(posicionamento_adicional)
-            print('Data ' + str(i) + ' processada')
-            i = i + 1
+    # 3º lugar: append apenas o segundo posicionamento
+    soup_adicional = acessar_info.pegar_soup_resposta(request_2, [lista_datas[1]])[0]
+    posicionamento_adicional = organizar_dados.extrair_posicionamento(soup_adicional)
+    historico.append(posicionamento_adicional)
+
+    # # 3º lugar: Append o que tiver a mais
+    # if len(lista_datas)>1:
+    #     soups_adicionais = acessar_info.pegar_soup_resposta(request, lista_datas[1:])
+    #     i = 2
+    #     for soup_adicional in soups_adicionais:
+    #         posicionamento_adicional = organizar_dados.extrair_posicionamento(soup_adicional)
+    #         historico.append(posicionamento_adicional)
+    #         print('Data ' + str(i) + ' processada')
+    #         i = i + 1
 
     # 4º lugar: Colocar histórico no excel e retornar excel
     # ------------ TESTE ------------

@@ -1,5 +1,7 @@
 from openpyxl import Workbook
 from django.http import HttpResponse
+from pprint import pprint
+
 
 def colocar_no_excel(historico):
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',)
@@ -7,6 +9,8 @@ def colocar_no_excel(historico):
     workbook = Workbook()
 
     for posicionamento in historico:
+        print(3*'\n' + 'O posicionamento está printado abaixo' + 3*'\n')
+        pprint(posicionamento)
         worksheet = workbook.create_sheet(title=posicionamento['data'].replace('/','-'))
         row_num = 1
         for linha in posicionamento['carteira']:

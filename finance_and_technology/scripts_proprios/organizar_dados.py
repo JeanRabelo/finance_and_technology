@@ -1,10 +1,17 @@
 import re
 from scripts_proprios import organizar_dadosAux
+from pprint import pprint
 
 def extrair_posicionamento(soup):
     # Criar dict
     posicionamento = {}
-    posicionamento['data'] = soup.find(id="ddCOMPTC").find(selected = 'selected').text
+    try:
+        posicionamento['data'] = soup.find(id="ddCOMPTC").find(selected = 'selected').text
+    except:
+        posicionamento['data'] = 'data com problema'
+        print('\n\n\nAmigo, rolou um problema, e ele está explicado abaixo\n\n\n')
+        pprint(soup)
+
 
     soup_infosPublicas = soup.find(id='dlAplics')
     soup_infosConfidenciais = soup.find(id='trAplicsConf')
