@@ -56,3 +56,8 @@ def extrair_datas(soup):
         lista_datas.append(data)
 
     return lista_datas
+
+def extrair_pkPartic(soup_1):
+    action_str = soup_1.find(id='Form1')['action']
+    n_partic = action_str.find('PK_PARTIC')
+    return action_str[n_partic:(n_partic+16)]

@@ -9,8 +9,8 @@ def colocar_no_excel(historico):
     workbook = Workbook()
 
     for posicionamento in historico:
-        print(3*'\n' + 'O posicionamento está printado abaixo' + 3*'\n')
-        pprint(posicionamento)
+        # print(3*'\n' + 'O posicionamento está printado abaixo' + 3*'\n')
+        # pprint(posicionamento)
         worksheet = workbook.create_sheet(title=posicionamento['data'].replace('/','-'))
         row_num = 1
         for linha in posicionamento['carteira']:

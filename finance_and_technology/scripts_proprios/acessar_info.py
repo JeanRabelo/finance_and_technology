@@ -4,7 +4,7 @@ from . import aux
 from random import choice
 from pprint import pprint
 
-def pegar_soup_resposta(request, lista_datas = None):
+def pegar_soup_resposta(request, lista_datas = None, num_fundo = None):
     # Checar se é pra pegar mais de um posicionamento:
     if lista_datas is None:
         link_1 = request.POST['link_1']
@@ -74,7 +74,7 @@ def pegar_soup_resposta(request, lista_datas = None):
             # num_fundo = argumentos_aspnet['Form1'][n_partic:(n_partic+16)]
             # print('Num fundo do artica (PK_PARTIC) do artica = ' + str(num_fundo))
             # url_generica = r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CDA/CPublicaCDA.aspx?' + num_fundo + '&SemFrame='
-
+            # action_str = BS(response_generica.content, 'html.parser').find(id='Form1')['action']
             del argumentos_aspnet['Form1']
 
             # response_generica = s.post(url_generica, argumentos_aspnet)
@@ -87,8 +87,9 @@ def pegar_soup_resposta(request, lista_datas = None):
             # action_str = BS(response_generica.content, 'html.parser').find(id='Form1')['action']
             # n_partic = action_str.find('PK_PARTIC')
             # num_fundo = action_str[n_partic:(n_partic+16)]
-            num_fundo = 'PK_PARTIC=179448'
-                  # r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CDA/CPublicaCDA.aspx?PK_PARTIC=179448&SemFrame='
+            # num_fundo = 'PK_PARTIC=179448'
+            # n_partic = action_str.find('PK_PARTIC')
+            # num_fundo = action_str[n_partic:(n_partic+16)]
             url = r'https://cvmweb.cvm.gov.br/SWB/Sistemas/SCW/CPublica/CDA/CPublicaCDA.aspx?' + num_fundo + '&SemFrame='
             # ESSA É CLARAMENTE A PARTE MAIS PROBLEMÁTICA DO CÓDIGO INTEIRO!!!- INICIO
             response = s.post(url, argumentos_aspnet, cookies=cookies_jar)
@@ -96,7 +97,7 @@ def pegar_soup_resposta(request, lista_datas = None):
             soups_adicionais.append(BS(response.content, 'html.parser'))
             print('Data ' + str(i) + ' acessada')
             i = i + 1
-            return soups_adicionais
+        return soups_adicionais
 
 
 def retornar_fundo(request):
